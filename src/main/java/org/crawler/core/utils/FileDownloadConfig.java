@@ -20,7 +20,31 @@ public class FileDownloadConfig {
 		this.downloadDestinationDir = builder.downloadDestinationDir;
 	}
 
-	public static class Builder {
+	public int getConnectTimeout() {
+		return connectTimeout;
+	}
+
+	public int getSocketTimeout() {
+		return socketTimeout;
+	}
+
+	public int getMaxRetryCount() {
+		return maxRetryCount;
+	}
+
+	public int getCoreThreadNum() {
+		return coreThreadNum;
+	}
+
+	public long getRequestBytesSize() {
+		return requestBytesSize;
+	}
+
+	public File getDownloadDestinationDir() {
+		return downloadDestinationDir;
+	}
+
+	private static class Builder {
 		private int connectTimeout;
 		private int socketTimeout;
 		private int maxRetryCount;
