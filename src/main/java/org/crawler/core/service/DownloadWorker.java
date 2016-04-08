@@ -19,7 +19,7 @@ public class DownloadWorker extends Worker{
 	
 	private HttpRequestImpl httpRequestImpl;
 	
-	private DownloadWorker(int id,String url,long thread_download_len,File file,HttpRequestImpl httpRequestImpl,CountDownLatch latch) {
+	public DownloadWorker(int id,String url,long thread_download_len,File file,HttpRequestImpl httpRequestImpl,CountDownLatch latch) {
 		this.id = id;
 		this.url = url;
 		this.thread_download_len = thread_download_len;

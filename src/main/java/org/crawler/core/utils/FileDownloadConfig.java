@@ -20,6 +20,10 @@ public class FileDownloadConfig {
 		this.downloadDestinationDir = builder.downloadDestinationDir;
 	}
 
+    public static FileDownloadConfig.Builder custom() {  
+        return new Builder();  
+    }
+    
 	public int getConnectTimeout() {
 		return connectTimeout;
 	}
@@ -44,7 +48,7 @@ public class FileDownloadConfig {
 		return downloadDestinationDir;
 	}
 
-	private static class Builder {
+	public static class Builder {
 		private int connectTimeout;
 		private int socketTimeout;
 		private int maxRetryCount;
@@ -81,7 +85,6 @@ public class FileDownloadConfig {
 			this.downloadDestinationDir = downloadDestinationDir;
 			return this;
 		}
-
 		public FileDownloadConfig build() {
 
 			initDefaultValue(this);
@@ -108,7 +111,7 @@ public class FileDownloadConfig {
 				builder.requestBytesSize = 1024 * 128;
 			}
 			if (builder.downloadDestinationDir == null) {
-				builder.downloadDestinationDir = new File("./");
+				builder.downloadDestinationDir = new File("D:/Download");
 			}
 		}
 	}

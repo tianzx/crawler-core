@@ -52,8 +52,18 @@ public class HttpRequestImpl {
 				end_index = end;
 			}
 			boolean success = false;
-			
 			success = requestByRange(url,raf,pos,end_index);
+			if(success){
+				pos += requestBytesSize;
+				retry = 0;
+			}else{
+				if(retry < maxRetryTime){
+					retry++;
+					logger.warn("线程:" + id +",url:"+url+",range:"+pos+","+end_index+" 下载失败,重试"+retry+"次");
+				}else{
+					logger.warn("线程:" + id +",url:"+url+",range:"+pos+","+end_index+" 下载失败,放弃重试!");
+				}
+			}
 		}
 	}
 
@@ -105,12 +115,19 @@ public class HttpRequestImpl {
 		long filesize = 0;
 		while(retry < maxRetryTime) {
 			filesize = getContentLength(url);
+			if(filesize>0){
+				break;
+			}else{
+				retry++;
+				logger.warn("get File Size failed,retry:"+retry);
+			}
 		}
-		return 0;
+		logger.info(filesize);
+		return filesize;
 	}
 
 	private long getContentLength(String url) {
-		HttpGet httpGet = new HttpGet();
+ 		HttpGet httpGet = new HttpGet(url);
 		httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.152 Safari/537.36");
 		
 		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(connectTimeOut)
@@ -120,7 +137,7 @@ public class HttpRequestImpl {
 		CloseableHttpResponse response = null;
 		
 		try {
-			httpClient.execute(httpGet);
+			response =httpClient.execute(httpGet);
 			
 			int code = response.getStatusLine().getStatusCode();
 			if(HttpStatus.SC_OK==code) {
